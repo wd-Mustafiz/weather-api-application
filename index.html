@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!--Required meta tags-->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>weather application</title>
+        <!--Bootstrap CSS-->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/8df4bca614.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="style.css">
+
+        <style>
+            body{
+                width: 100%;
+                height: 100vh;
+                background: linear-gradient(rgba(0,0,0,.2) , rgba(0,0,0,.3)),url('asesst/main-bg.jpg') no-repeat;
+                background-size: cover;
+                background-position: center;
+                overflow: hidden;
+                
+            }
+
+            main{
+               width: 70%;
+               margin: 100px auto 0 auto;
+               
+               text-align: center;
+            }
+
+            .costom{
+                width: 70%;
+                background-color: #141414;
+                border-radius: 10px;
+                color: white;
+                font-size: 22px !important;
+                padding: 8px 10px;
+                margin: auto;
+
+            }
+
+            @media (max-width: 650px){
+                main{
+                    width: 100%;
+                    margin: 50px auto 0 auto;
+                }
+                .costom{
+                    width: 80%;
+                }
+            }
+
+        </style>
+    </head>
+    <body>
+
+        <main>
+            
+                    <h1 id="location" class="text-light">Location</h1>
+                    
+                    <h2 id="desc" class="text-light">discription</h2>
+                    <h3 id="w-string" class="text-light">W-string</h3>
+                    <img id="w-icon" src="" alt="">
+                
+
+
+                <ul class="list-unstyled">
+                    <li class="costom mt-3" id="humidty"></li>
+                    <li class="costom mt-3" id="presure"></li>
+                    <li class="costom mt-3" id="speed"></li>
+                </ul> 
+
+                <hr>
+
+                <button type="button" class="btn btn-info"  data-toggle="modal" data-target="#exampleModal">
+                    change city
+                </button>
+                
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">City name ?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                        <form action="">
+                            <input type="text" class="form-group w-100" id="cityInput" placeholder="enter city name">
+                        </form>
+                        </div>
+                        <div class="modal-footer">
+                        
+                        <button type="button" id="w-change" class="btn btn-primary" data-dismiss="modal">Check Weather</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <br><br>
+
+
+                <h5 class="text-light">Develop by <a class="text-info" href="https://www.facebook.com/mustafiz.munna.58">mustafiz munna</a></h5>
+            
+            
+        </main>
+
+        
+        
+        
+
+        <!--Optional JavaScript-->
+        <!--jQuery first, then Popper.js, then Bootstrap JS-->
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+
+        <script>
+            class weather{
+                constructor(city){
+                    
+                    this.city = city;
+                    this.appid = '5106e6dc9d6f772c3ff5579b7fef1e87';
+                }
+
+                async getWether(){
+                    const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${this.city}&appid=${this.appid}`);
+                    const data = await response.json();
+
+                    return data;
+                }
+            }
+
+
+            class UI{
+                constructor(){
+                    this.location = document.getElementById('location');
+                    
+                    this.desc = document.getElementById('desc');
+                    this.wstring = document.getElementById('w-string');
+                    this.icon = document.getElementById('w-icon');
+
+                    this.humidty = document.getElementById('humidty');
+                    this.pressure = document.getElementById('presure');
+                    this.speed = document.getElementById('speed');
+                }
+
+                paint(weather){
+                    this.location.textContent = weather.name;
+                    this.desc.textContent = weather.weather[0].description;
+                    this.wstring.textContent = Math.floor(weather.main.temp - 273.15) + "°C" ;
+                    this.icon.src = `http://openweathermap.org/img/w/${weather.weather[0].icon}.png`;
+                    this.humidty.textContent ='Humidity '+ weather.main.humidity + ' %' ;
+                    this.pressure.textContent = 'pressure ' + weather.main.pressure;
+                    this.speed.textContent = "Wind speed " + weather.wind.speed +  "km/h";
+                    
+                }
+            }
+
+            const ui = new UI;
+            async function getcity(){
+                const city = await fetch('https://ipapi.co/json/');
+                const data = await city.json();
+
+                return data;
+            }
+
+            getcity().then(data => {
+                
+                
+                const abohaua = new weather(data.city);
+                abohaua.getWether().then(data => {
+                    console.log(data);
+                    ui.paint(data);
+                })
+            })
+
+
+            document.getElementById('w-change').addEventListener('click' , ()=>{
+                console.log('clikc marse');
+                const cityname = document.getElementById('cityInput').value;
+
+                const abohaua = new weather(cityname);
+                abohaua.getWether().then(data => {
+                    
+                    ui.paint(data);
+                })
+            })
+        </script>
+
+    </body>
+</html>
