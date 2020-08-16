@@ -151,7 +151,7 @@
                     this.location.textContent = weather.name;
                     this.desc.textContent = weather.weather[0].description;
                     this.wstring.textContent = Math.floor(weather.main.temp - 273.15) + "°C" ;
-                    this.icon.src = `http://openweathermap.org/img/w/${weather.weather[0].icon}.png`;
+                    this.icon.src = `https://openweathermap.org/img/w/${weather.weather[0].icon}.png`;
                     this.humidty.textContent ='Humidity '+ weather.main.humidity + ' %' ;
                     this.pressure.textContent = 'pressure ' + weather.main.pressure;
                     this.speed.textContent = "Wind speed " + weather.wind.speed +  "km/h";
